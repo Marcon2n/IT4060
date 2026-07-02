@@ -6,4 +6,4 @@ server
 client
 resolver
 *.zip
-
+*.png
