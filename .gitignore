@@ -1,0 +1,9 @@
+# Compiled object files and executables (gcc output)
+*.o
+*.out
+*.exe
+server
+client
+resolver
+*.zip
+

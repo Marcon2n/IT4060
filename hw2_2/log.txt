@@ -1,0 +1,34 @@
+--- Ket qua tra cuu: google.com ---
+Query time: 0.53 ms
+Canonical name (CNAME): google.com
+Official IP: 142.250.198.142
+Alias IP:
+
+--- Ket qua tra cuu: facebook.com ---
+Query time: 0.22 ms
+Canonical name (CNAME): facebook.com
+Official IP: 57.144.64.1
+Alias IP:
+
+--- Ket qua tra cuu: 126.58.99.199 ---
+Query time: 0.20 ms
+Official name: softbank126058099199.bbtec.net
+Alias name:
+
+--- Ket qua tra cuu: aws.amazon.com ---
+Query time: 0.45 ms
+Canonical name (CNAME): dr49lng3n1n2s.cloudfront.net
+Official IP: 13.227.227.103
+Alias IP:
+13.227.227.112
+13.227.227.83
+13.227.227.40
+
+--- Ket qua tra cuu: 192.168.10.110 ---
+special IP address — may not have DNS record
+Not found information
+
+--- Ket qua tra cuu: 192.168.10.110 ---
+special IP address — may not have DNS record
+Not found information
+

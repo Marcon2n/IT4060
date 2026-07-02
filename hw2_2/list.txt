@@ -1,0 +1,5 @@
+google.com
+facebook.com
+126.58.99.199
+aws.amazon.com
+192.168.10.110
