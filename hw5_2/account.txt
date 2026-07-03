@@ -1,0 +1,4 @@
+admin admin123 0
+alice alice123 1
+bob bob12345 1
+carol carol000 0
