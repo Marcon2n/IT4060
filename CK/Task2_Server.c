@@ -328,7 +328,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    printf("Server Caesar dang lang nghe tren cong %d\n", port);
+    printf("Server dang lang nghe tren cong %d\n", port);
 
     while (1)
     {
