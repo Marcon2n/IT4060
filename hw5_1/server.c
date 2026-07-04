@@ -22,6 +22,26 @@
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 5500
 #define BUFFER_SIZE 1024
+#define CAESAR_KEY 3 // Khoa Caesar dung chung, phai giong voi client
+
+// Ma hoa Caesar: chi dich cac ky tu chu cai, giu nguyen cac ky tu khac
+void caesar_encrypt(char *str, int key)
+{
+    key = ((key % 26) + 26) % 26; // Chuan hoa key ve khoang [0, 25]
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        if (isupper((unsigned char)str[i]))
+            str[i] = 'A' + (str[i] - 'A' + key) % 26;
+        else if (islower((unsigned char)str[i]))
+            str[i] = 'a' + (str[i] - 'a' + key) % 26;
+    }
+}
+
+// Giai ma Caesar: dich nguoc lai voi cung khoa
+void caesar_decrypt(char *str, int key)
+{
+    caesar_encrypt(str, 26 - ((key % 26) + 26) % 26);
+}
 
 // Hàm chạy trên thread riêng, phục vụ trao đổi dữ liệu với 1 client
 void *handle_client(void *arg)
@@ -46,7 +66,10 @@ void *handle_client(void *arg)
         // Xóa ký tự xuống dòng dư thừa nếu client gửi kèm \n
         buffer[strcspn(buffer, "\r\n")] = '\0';
 
-        printf("[Thread %lu] Nhan tu client: %s\n", pthread_self(), buffer);
+        // Giải mã bản tin Caesar nhận được từ client
+        caesar_decrypt(buffer, CAESAR_KEY);
+
+        printf("[Thread %lu] Nhan tu client (da giai ma): %s\n", pthread_self(), buffer);
 
         // Client yêu cầu kết thúc phiên làm việc
         if (strcmp(buffer, "q") == 0 || strcmp(buffer, "Q") == 0)
@@ -60,6 +83,9 @@ void *handle_client(void *arg)
         {
             buffer[i] = toupper((unsigned char)buffer[i]);
         }
+
+        // Mã hóa lại trước khi gửi phản hồi cho client
+        caesar_encrypt(buffer, CAESAR_KEY);
 
         send(conn_sk, buffer, strlen(buffer), 0);
     }

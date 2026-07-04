@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
@@ -20,6 +21,26 @@
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 5500
 #define BUFFER_SIZE 1024
+#define CAESAR_KEY 3 // Khoa Caesar dung chung, phai giong voi server
+
+// Ma hoa Caesar: chi dich cac ky tu chu cai, giu nguyen cac ky tu khac
+void caesar_encrypt(char *str, int key)
+{
+    key = ((key % 26) + 26) % 26; // Chuan hoa key ve khoang [0, 25]
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        if (isupper((unsigned char)str[i]))
+            str[i] = 'A' + (str[i] - 'A' + key) % 26;
+        else if (islower((unsigned char)str[i]))
+            str[i] = 'a' + (str[i] - 'a' + key) % 26;
+    }
+}
+
+// Giai ma Caesar: dich nguoc lai voi cung khoa
+void caesar_decrypt(char *str, int key)
+{
+    caesar_encrypt(str, 26 - ((key % 26) + 26) % 26);
+}
 
 int main()
 {
@@ -66,6 +87,12 @@ int main()
         // Xóa ký tự xuống dòng do fgets giữ lại khi nhấn Enter
         input[strcspn(input, "\r\n")] = '\0';
 
+        // Kiểm tra yêu cầu thoát trên bản rõ trước khi mã hóa
+        int is_quit = (strcmp(input, "q") == 0 || strcmp(input, "Q") == 0);
+
+        // Mã hóa Caesar bản tin trước khi gửi lên server
+        caesar_encrypt(input, CAESAR_KEY);
+
         // Gửi thông điệp lên server
         int bytes_sent = send(client_sk, input, strlen(input), 0);
         if (bytes_sent < 0)
@@ -76,7 +103,7 @@ int main()
         total_bytes_sent += bytes_sent;
 
         // Người dùng nhập q/Q: ngừng gửi và đóng kết nối
-        if (strcmp(input, "q") == 0 || strcmp(input, "Q") == 0)
+        if (is_quit)
         {
             printf("Dang ngat ket noi...\n");
             break;
@@ -91,6 +118,9 @@ int main()
             break;
         }
         buffer[bytes_received] = '\0';
+
+        // Giải mã Caesar bản tin nhận về từ server
+        caesar_decrypt(buffer, CAESAR_KEY);
 
         printf("Phan hoi tu server: %s\n", buffer);
     }
